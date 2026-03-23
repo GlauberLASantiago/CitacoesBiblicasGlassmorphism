@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luz Diária - Citações Bíblicas</title>
+    <!-- Fonte Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-start: #0f0c29;
+            --bg-end: #302b63;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-cyan: #00ffff;
+            --vibrant-violet: #8a2be2;
+            --electric-indigo: #4b0082;
+            --text-main: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            color: var(--text-main);
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .blob {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(var(--vibrant-violet), var(--electric-indigo));
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.35;
+            animation: move 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes move {
+            0% { transform: translate(-30%, -30%) scale(1); }
+            100% { transform: translate(30%, 30%) scale(1.2); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        /* Controlos de Áudio */
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 12px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+        }
+
+        .audio-select {
+            background: transparent;
+            color: var(--neon-cyan);
+            border: none;
+            outline: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .audio-select option {
+            background: var(--bg-start);
+            color: white;
+        }
+
+        .volume-slider {
+            width: 70px;
+            height: 4px;
+            accent-color: var(--neon-cyan);
+            cursor: pointer;
+        }
+
+        #audio-status {
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            min-width: 100px;
+            text-align: left;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 25px;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        #quote-container {
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .verse-text {
+            font-size: 1.6rem;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px 10px;
+        }
+
+        .word {
+            display: inline-block;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+        }
+
+        .word:hover {
+            color: var(--neon-cyan);
+            transform: scale(1.3) translateY(-5px);
+            text-shadow: 0 0 20px var(--neon-cyan);
+            font-weight: 700;
+            z-index: 10;
+        }
+
+        .reference {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, var(--vibrant-violet), var(--electric-indigo));
+            border: none;
+            padding: 18px 45px;
+            border-radius: 50px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--neon-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 500px) {
+            .glass-card { padding: 30px 15px; }
+            .verse-text { font-size: 1.25rem; }
+            .audio-controls { flex-direction: column; gap: 10px; border-radius: 20px; }
+        }
+    </style>
+</head>
+<body onclick="unlockAudio()">
+
+    <div class="blob"></div>
+
+    <div class="container">
+        <main class="glass-card">
+            <!-- Barra de Controlos -->
+            <div class="audio-controls">
+                <select id="bg-music-select" class="audio-select" onchange="changeMusic()">
+                    <option value="none">Silêncio</option>
+                    <option value="piano" selected>Piano Suave</option>
+                    <option value="rain">Chuva</option>
+                    <option value="forest">Natureza</option>
+                </select>
+                <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="0.4" oninput="updateVolume()">
+                <span id="audio-status">🔈 Pausado</span>
+            </div>
+
+            <h1>Luz das Escrituras</h1>
+            
+            <div id="quote-container">
+                <div id="loader" class="loader"></div>
+                <div id="verse-content">
+                    <p class="verse-text" id="text">Toque em Nova Citação para iniciar...</p>
+                    <p class="reference" id="ref"></p>
+                </div>
+            </div>
+
+            <button class="btn-refresh" onclick="handleInteraction()" id="btn-action">
+                Nova Citação
+            </button>
+        </main>
+    </div>
+
+    <!-- Elementos de Áudio -->
+    <audio id="bg-audio" loop preload="auto"></audio>
+    <!-- Som de hover curto e fiável (Google CDN) -->
+    <audio id="hover-audio" preload="auto" src="https://actions.google.com/sounds/v1/ui/beep_short_low.ogg"></audio>
+
+    <script>
+        const textElement = document.getElementById('text');
+        const refElement = document.getElementById('ref');
+        const loader = document.getElementById('loader');
+        const content = document.getElementById('verse-content');
+        const btnAction = document.getElementById('btn-action');
+        const audioStatus = document.getElementById('audio-status');
+        
+        const bgAudio = document.getElementById('bg-audio');
+        const hoverAudio = document.getElementById('hover-audio');
+        const musicSelect = document.getElementById('bg-music-select');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        let audioUnlocked = false;
+
+        // Fontes de áudio atualizadas para links extremamente estáveis (Google e SoundHelix)
+        const tracks = {
+            piano: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            rain: "https://actions.google.com/sounds/v1/water/rain_on_roof.ogg",
+            forest: "https://actions.google.com/sounds/v1/ambiences/forest_morning_birds.ogg"
+        };
+
+        const fallbackVerses = [
+            { text: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.", ref: "João 3:16" },
+            { text: "O Senhor é o meu pastor, nada me faltará.", ref: "Salmo 23:1" },
+            { text: "Posso todas as coisas naquele que me fortalece.", ref: "Filipenses 4:13" },
+            { text: "Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.", ref: "Salmo 119:105" },
+            { text: "O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha.", ref: "1 Coríntios 13:4" }
+        ];
+
+        function unlockAudio() {
+            if (!audioUnlocked) {
+                // Tenta reproduzir e pausar imediatamente para "pedir permissão" ao navegador
+                bgAudio.play().then(() => {
+                    bgAudio.pause();
+                    audioUnlocked = true;
+                    console.log("Sistema de áudio pronto.");
+                }).catch(e => {
+                    // Ignora erros silenciosamente até que o utilizador clique
+                });
+            }
+        }
+
+        function playHoverSound() {
+            if (!audioUnlocked) return;
+            // Som de hover extremamente curto (ruído suave)
+            hoverAudio.currentTime = 0;
+            hoverAudio.volume = 0.1;
+            hoverAudio.play().catch(() => {});
+        }
+
+        function formatText(text) {
+            return text.split(' ').map(word => 
+                `<span class="word" onmouseenter="playHoverSound()">${word}</span>`
+            ).join(' ');
+        }
+
+        function changeMusic() {
+            const selected = musicSelect.value;
+            if (selected === 'none') {
+                bgAudio.pause();
+                audioStatus.innerText = "🔈 Mudo";
+            } else {
+                audioStatus.innerText = "⏳ Carregando...";
+                
+                // Reinicia o áudio com a nova fonte
+                bgAudio.pause();
+                bgAudio.src = tracks[selected];
+                bgAudio.load();
+                
+                bgAudio.play().then(() => {
+                    audioStatus.innerText = "🔊 Tocando";
+                }).catch(error => {
+                    audioStatus.innerText = "⚠️ Erro Áudio";
+                    console.error("Erro ao reproduzir:", error);
+                });
+            }
+        }
+
+        function updateVolume() {
+            bgAudio.volume = volumeSlider.value;
+            if (volumeSlider.value == 0) audioStatus.innerText = "🔈 Mudo";
+            else if (!bgAudio.paused) audioStatus.innerText = "🔊 Tocando";
+        }
+
+        function handleInteraction() {
+            unlockAudio();
+            if (musicSelect.value !== 'none' && bgAudio.paused) {
+                changeMusic();
+            }
+            fetchVerse();
+        }
+
+        async function fetchVerse() {
+            loader.style.display = 'block';
+            content.style.opacity = '0';
+            btnAction.disabled = true;
+
+            try {
+                // Simula uma busca para manter a fluidez visual
+                const randomIdx = Math.floor(Math.random() * fallbackVerses.length);
+                const data = fallbackVerses[randomIdx];
+                await new Promise(resolve => setTimeout(resolve, 800));
+                displayVerse(data.text, data.ref);
+            } catch (e) {
+                displayVerse("A luz brilha nas trevas.", "João 1:5");
+            } finally {
+                loader.style.display = 'none';
+                content.style.opacity = '1';
+                btnAction.disabled = false;
+            }
+        }
+
+        function displayVerse(text, reference) {
+            textElement.innerHTML = formatText(text);
+            refElement.innerText = reference;
+        }
+
+        // Monitorização de erros de rede
+        bgAudio.addEventListener('error', (e) => {
+            if (musicSelect.value !== 'none') {
+                audioStatus.innerText = "⚠️ Erro Fonte";
+                console.error("Erro no elemento de áudio:", bgAudio.error);
+            }
+        });
+
+        bgAudio.volume = 0.4;
+    </script>
+</body>
+</html>
